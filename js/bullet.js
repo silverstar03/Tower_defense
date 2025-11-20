@@ -1,5 +1,5 @@
 // 총알을 관리하는 클래스
-class Bullet {
+class TrackingBullet {
   constructor(x, y, target) {
     this.pos = createVector(x, y);  // 총알의 시작 위치
     this.target = target;           // 총알의 타겟 (적 객체)

@@ -1,6 +1,7 @@
 // 게임 설정
 let gameManager;         //게임 관리 객체 생성을 위한 전역 변수
 let gameState = "init";  //게임 상태
+let selectedTower;       //타워 종류 선택
 
 function setup() {
   let startButton;
@@ -34,8 +35,27 @@ function setup() {
     background(200);  // 배경색 설정
 
     setTimeout(() => {
+      // 타워 선택 버튼 생성
+      createTowerSelectBtn();
+
+      // 게임상태 변경
       gameState = "ready";
     }, 100);
+  });
+
+}
+
+function createTowerSelectBtn() {
+  let trackingBtn = createButton("tower1");
+  trackingBtn.position(720, 200);
+  trackingBtn.mousePressed(() => {
+    selectedTower = "tracking";
+  });
+
+  let fixedBtn = createButton("tower2");
+  fixedBtn.position(800, 200);
+  fixedBtn.mousePressed(() => {
+    selectedTower = "fixed";
   });
 
 }
@@ -48,6 +68,8 @@ function draw() {
     background(200);
 
     gameManager.pathDraw();  // 경로 그리기
+
+    // 게임 시작 버튼 생성
     gameButton = createButton("START");
     gameButton.position(700, 550);
     gameButton.style("width", "190px");
@@ -90,7 +112,9 @@ function draw() {
 // 마우스 클릭 시 타워를 설치
 function mousePressed() {
   if (gameState === "ready" || gameState === "play") {
-    if (mouseX > 800) return;   // 게임맵을 벗어나면 타워 못그리게 막기
-    gameManager.handleTowerPlacement(mouseX, mouseY);  // 마우스 클릭 위치에 타워 배치
+    if (mouseX > 700) return;   // 게임맵을 벗어나면 타워 못그리게 막기)
+    if (selectedTower) {
+      gameManager.handleTowerPlacement(mouseX, mouseY, selectedTower);  // 마우스 클릭 위치에 타워 배치
+    }
   }
 }

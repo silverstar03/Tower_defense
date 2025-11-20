@@ -21,7 +21,10 @@ class Enemy {
 
     // 목표 지점에 도달하면 다음 포인트로 이동
     if (dist(this.pos.x, this.pos.y, target.x, target.y) < 5) {
-      this.targetIndex++;  // 다음 지점으로 이동
+      this.targetIndex++;
+      if (this.targetIndex >= this.path.points.length) {
+        this.dead = true; // 마지막 지점 도달 시 죽음
+      }
     }
   }
 
