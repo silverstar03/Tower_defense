@@ -1,9 +1,9 @@
 // 총알을 관리하는 클래스
 class TrackingBullet {
   constructor(x, y, target) {
-    this.pos = createVector(x, y);  // 총알의 시작 위치
-    this.target = target;           // 총알의 타겟 (적 객체)
-    this.speed = 5;                 // 총알의 이동 속도
+    this.pos = createVector(x, y);  // 총알 위치
+    this.target = target;           // 타겟
+    this.speed = 5;                 // 이동 속도
     this.dead = false;              // 총알이 죽었는지 여부
     this.damage = 20;               // 총알의 데미지
   }
@@ -26,9 +26,9 @@ class TrackingBullet {
     }
   }
 
-  // 총알을 화면에 그리는 메서드
+  // 총알 화면에 그리기
   draw() {
-    fill(255, 255, 0);  // 총알의 색상을 노란색으로 설정
-    circle(this.pos.x, this.pos.y, 8);  // 총알을 원 모양으로 그리기
+    fill(255, 255, 0);  // 색상
+    circle(this.pos.x, this.pos.y, 8);  // 총알 모양
   }
 }

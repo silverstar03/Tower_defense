@@ -1,18 +1,27 @@
 // ShortBullet 클래스
 class ShortBullet {
   constructor(x, y, direction) {
+    this.startPos = createVector(x, y);  // 시작 위치 기록
     this.pos = createVector(x, y);  // 총알 위치
     this.dir = direction.copy();    // 발사 방향 (고정)
-    this.speed = 6;                 // 이동 속도
+    this.speed = 4;                 // 이동 속도
     this.dead = false;              // 총알 제거 여부
-    this.damage = 50;               // 총알 데미지
+    this.damage = 20;               // 총알 데미지
     this.radius = 8;                // 총알 크기
+    this.maxDistance = 90;          // 최대 이동 거리
   }
 
   // 총알 이동 및 적과 충돌 처리
   update(enemies) {
     // 방향 * 속도로 이동
     this.pos.add(p5.Vector.mult(this.dir, this.speed));
+
+    // 시작 위치에서 얼마나 이동했는지 계산
+    let traveled = p5.Vector.dist(this.startPos, this.pos);
+    if (traveled >= this.maxDistance) {
+      this.dead = true; // 최대 이동거리 도달하면 총알 소멸
+      return;
+    }
 
     // 적과 충돌 체크
     for (let e of enemies) {

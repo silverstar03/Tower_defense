@@ -28,7 +28,7 @@ class GameManager {
 
   // 게임 시작 전 타워 설정하는 메서드
   pathDraw() {
-    this.path.draw();  // 경로를 화면에 그리기
+    this.path.draw();   // 경로를 화면에 그리기
     this.drawTowers();  // 타워들을 화면에 그리기
   }
 

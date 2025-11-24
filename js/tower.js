@@ -32,15 +32,17 @@ class TrackingTower extends Tower {
     }
 
     // 타겟이 있고 발사 가능하면 추적 총알 발사
-    if (this.target && this.canShoot()) {
-      bullets.push(new TrackingBullet(this.pos.x, this.pos.y, this.target)); 
+    if (target && this.canShoot()) {
+      bullets.push(new TrackingBullet(this.pos.x, this.pos.y, target)); 
       this.lastShot = millis(); // 발사 시간 갱신
     }
   }
 
   draw() {
-    fill(0, 200, 255); // 파란색 원
-    ellipse(this.pos.x, this.pos.y, 30, 30);
+    // fill(0, 200, 255); // 파란색 원
+    // ellipse(this.pos.x, this.pos.y, 30, 30);
+    imageMode(CENTER); // 중심 기준으로 그림
+    image(trackingTowerImg, this.pos.x, this.pos.y, 50, 50);
   }
 }
 
@@ -64,19 +66,24 @@ class FixedGunTower extends Tower {
     }
 
     if (target && this.canShoot()) {
-      // 8방향으로 총알 발사
-      let angles = [0, 45, 90, 135, 180, 225, 270, 315]; // degree
+      let angles = [0, 45, 90, 135, 180, 225, 270, 315]; // 총알 8개
+      //let angles = [0, 60, 120, 180, 240, 300]; // 총알 6개
+
       for (let a of angles) {
           let rad = radians(a);
           let dir = createVector(cos(rad), sin(rad)); // 단위 벡터
           bullets.push(new ShortBullet(this.pos.x, this.pos.y, dir));
       }
+
+      // 발사 시간 갱신
       this.lastShot = millis();
     }
   }
 
   draw() {
-    fill(255, 150, 0); // 주황색 사각형
-    rect(this.pos.x - 15, this.pos.y - 15, 30, 30);
+    // fill(255, 150, 0); // 주황색 사각형
+    // rect(this.pos.x - 15, this.pos.y - 15, 30, 30);
+    imageMode(CENTER); // 중심 기준으로 그림
+    image(fixedGunTowerImg, this.pos.x, this.pos.y, 50, 50);
   }
 }
