@@ -28,7 +28,7 @@ class GameManager {
 
   // 게임 시작 전 타워 설정하는 메서드
   pathDraw() {
-    this.path.draw();  // 경로를 화면에 그리기
+    this.path.draw();   // 경로를 화면에 그리기
     this.drawTowers();  // 타워들을 화면에 그리기
   }
 
@@ -102,11 +102,17 @@ class GameManager {
   // 총알들의 상태를 업데이트하는 메서드
   updateBullets() {
     for (let b of this.bullets) {
-      b.update();  // 각 총알의 상태 업데이트 (타겟 추적, 충돌 처리 등)
+      // ShortBullet이면 enemies 배열 전달
+      if (b instanceof ShortBullet) {
+        b.update(this.enemies);
+      } else {
+        b.update(); // TrackingBullet 등 기존 총알은 그대로
+      }
     }
     // 죽은 총알 제거
     this.bullets = this.bullets.filter(b => !b.dead);
   }
+
 
   // 화면에 총알들을 그리는 메서드
   drawBullets() {
@@ -116,10 +122,16 @@ class GameManager {
   }
 
   // 사용자가 클릭한 위치에 타워를 설치하는 메서드
-  handleTowerPlacement(x, y) {
-    this.towerCount -= 1;
-    if (this.towerCount < 0) return;
-    this.towers.push(new Tower(x, y));  // (x, y) 좌표에 새 타워 추가
+  handleTowerPlacement(x, y, type) {
+    this.towerCount--;
+    if (this.towerCount < 0) return; // 남은 타워 없으면 설치 불가
+
+        // type에 따라 다른 클래스 생성
+    if (type === "tracking") {
+        this.towers.push(new TrackingTower(x, y));
+    } else if (type === "fixed") {
+        this.towers.push(new FixedGunTower(x, y));
+    }
   }
 
   // 적이 경로의 끝까지 갔는지 체크하는 메서드
