@@ -1,12 +1,13 @@
 // 게임 설정
 let gameManager;         //게임 관리 객체 생성을 위한 전역 변수
 let gameState = "init";  //게임 상태
-let selectedTower;       //타워 종류 선택
+let selectedTower = null;       //타워 종류 선택
 let result;
 let trackingBtn;
 let fixedBtn;
 let gameButton;
 let descButton;
+let towerIntallYn = false;
 
 // 이미지 관련 변수들
 let mapImg;
@@ -230,11 +231,20 @@ function draw() {
     base.draw();
   }
 
+  // 마우스 위치 경로 위인지 확인
+  let onPath = gameManager.path.isOnPath(mouseX, mouseY);
+
   // 타워 설치 가능할 때만 마우스 커서에 이미지 붙이기
   if ( gameManager.towerCount > 0 && selectedTower != null) {
     // 범위 테두리 그림자 생성
     noStroke();
     fill(255, 90);
+    
+    // 설치 불가 영역 표시
+    if (mouseX > 680 || mouseX < 150 || mouseY > 550 || onPath) {
+      towerIntallYn = false;
+      fill(255, 0, 0, 90);
+    }
 
     if (selectedTower == "tracking") {
       ellipse(mouseX, mouseY, 200, 200); // 사거리 원 그리기
@@ -254,13 +264,13 @@ function mousePressed() {
 
     // 마우스 좌클릭
     if(mouseButton === LEFT) {
-      if (mouseX > 700) return;   // 게임맵을 벗어나면 타워 못그리게 막기)
+      if (mouseX > 700 || mouseX < 150 && !towerIntallYn) return;   // 게임맵을 벗어나면 타워 못그리게 막기)
       if (selectedTower) {
         gameManager.handleTowerPlacement(mouseX, mouseY, selectedTower);  // 마우스 클릭 위치에 타워 배치
         selectedTower = null;  // 타워 선택 초기화
       }
-      
     }
+
     // 마우스 우클릭
     else if (mouseButton === RIGHT) {
       // 타워 배열을 마지막 요소부터 탐색

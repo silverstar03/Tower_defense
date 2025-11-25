@@ -13,6 +13,43 @@ class Path {
       { x: 610, y: 430 }, // 여덟 번째 지점
       { x: 610, y: 530 }  // 경로 끝 지점
     ];
+    this.pathThickness = 15; // 경로 두께
+  }
+
+  // (x, y)가 경로 위인지 확인
+  isOnPath(x, y) {
+    let towerRadius = 25; // 타워 반경
+    for (let i = 0; i < this.points.length - 1; i++) {
+      let p1 = this.points[i];
+      let p2 = this.points[i + 1];
+
+      // 점과 선분의 최소거리 계산
+      let d = this.pointToSegmentDist(x, y, p1.x, p1.y, p2.x, p2.y);
+
+      // 경로 두께 + 타워 반경 내에 들어오면 경로 위로 간주
+      if (d < this.pathThickness + towerRadius) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+  // 점과 선분 사이 거리 계산
+  pointToSegmentDist(px, py, x1, y1, x2, y2) {
+    let A = px - x1;
+    let B = py - y1;
+    let C = x2 - x1;
+    let D = y2 - y1;
+
+    let dot = A * C + B * D;
+    let len = C * C + D * D;
+    let t = Math.max(0, Math.min(1, dot / len));
+
+    let cx = x1 + t * C;
+    let cy = y1 + t * D;
+
+    return dist(px, py, cx, cy);
   }
 
   // 경로를 화면에 그리는 메서드
