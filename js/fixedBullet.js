@@ -1,14 +1,14 @@
-// ShortBullet 클래스
-class ShortBullet {
+// fixedBullet 관리 클래스
+class FixedBullet {
   constructor(x, y, direction) {
     this.startPos = createVector(x, y);  // 시작 위치 기록
-    this.pos = createVector(x, y);  // 총알 위치
-    this.dir = direction.copy();    // 발사 방향 (고정)
-    this.speed = 4;                 // 이동 속도
-    this.dead = false;              // 총알 제거 여부
-    this.damage = 20;               // 총알 데미지
-    this.radius = 8;                // 총알 크기
-    this.maxDistance = 90;          // 최대 이동 거리
+    this.pos = createVector(x, y);       // 총알 위치
+    this.dir = direction.copy();         // 발사 방향 (고정)
+    this.speed = 4;                      // 이동 속도 (작을수록 느려짐)
+    this.dead = false;                   // 총알 제거 여부
+    this.damage = 20;                    // 총알 데미지
+    this.radius = 15;                    // 충돌 범위
+    this.maxDistance = 80;               // 최대 이동 거리
   }
 
   // 총알 이동 및 적과 충돌 처리
@@ -36,6 +36,6 @@ class ShortBullet {
   // 총알 화면에 그리기
   draw() {
     fill(255, 200, 0);  // 색상
-    circle(this.pos.x, this.pos.y, this.radius); // 원으로 표시
+    circle(this.pos.x, this.pos.y, 8); // 원으로 표시
   }
 }
