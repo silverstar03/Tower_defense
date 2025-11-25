@@ -39,8 +39,6 @@ class TrackingTower extends Tower {
   }
 
   draw() {
-    // fill(0, 200, 255); // 파란색 원
-    // ellipse(this.pos.x, this.pos.y, 30, 30);
     imageMode(CENTER); // 중심 기준으로 그림
     image(trackingTowerImg, this.pos.x, this.pos.y, 50, 50);
   }
@@ -60,19 +58,18 @@ class FixedGunTower extends Tower {
     for (let e of enemies) {
       let d = p5.Vector.dist(this.pos, e.pos);
       if (!e.dead && d < this.range) {
-        target = e; // 첫 번째로 발견된 적만 공격
+        target = e;
         break;
       }
     }
 
     if (target && this.canShoot()) {
       let angles = [0, 45, 90, 135, 180, 225, 270, 315]; // 총알 8개
-      //let angles = [0, 60, 120, 180, 240, 300]; // 총알 6개
 
       for (let a of angles) {
           let rad = radians(a);
           let dir = createVector(cos(rad), sin(rad)); // 단위 벡터
-          bullets.push(new ShortBullet(this.pos.x, this.pos.y, dir));
+          bullets.push(new FixedBullet(this.pos.x, this.pos.y, dir));
       }
 
       // 발사 시간 갱신
@@ -81,8 +78,6 @@ class FixedGunTower extends Tower {
   }
 
   draw() {
-    // fill(255, 150, 0); // 주황색 사각형
-    // rect(this.pos.x - 15, this.pos.y - 15, 30, 30);
     imageMode(CENTER); // 중심 기준으로 그림
     image(fixedGunTowerImg, this.pos.x, this.pos.y, 50, 50);
   }

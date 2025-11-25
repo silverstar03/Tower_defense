@@ -102,8 +102,8 @@ class GameManager {
   // 총알들의 상태를 업데이트하는 메서드
   updateBullets() {
     for (let b of this.bullets) {
-      // ShortBullet이면 enemies 배열 전달
-      if (b instanceof ShortBullet) {
+      // FixedBullet이면 enemies 배열 전달
+      if (b instanceof FixedBullet) {
         b.update(this.enemies);
       } else {
         b.update(); // TrackingBullet 등 기존 총알은 그대로
@@ -124,7 +124,12 @@ class GameManager {
   // 사용자가 클릭한 위치에 타워를 설치하는 메서드
   handleTowerPlacement(x, y, type) {
     this.towerCount--;
-    if (this.towerCount < 0) return; // 남은 타워 없으면 설치 불가
+
+    // 남은 타워 없으면 설치 불가
+    if (this.towerCount < 0) {
+      this.towerCount = 0;
+      return;
+    }
 
         // type에 따라 다른 클래스 생성
     if (type === "tracking") {
@@ -151,6 +156,6 @@ class GameManager {
   drawLives() {
     fill(255);
     textSize(20);
-    text(`목숨 : ${this.lives}`, width - 290, 30);
+    text(`목숨 : ${this.lives}`, width - 80, 30);
   }
 }
