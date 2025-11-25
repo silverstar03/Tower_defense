@@ -4,7 +4,8 @@ class Enemy {
     this.path = path;      // 적이 이동할 경로 (Path 클래스 인스턴스)
     this.pos = createVector(path.points[0].x, path.points[0].y);  // 경로의 첫 번째 지점에서 시작
     this.speed = 2.5;      // 적의 이동 속도
-    this.hp = 50;          // 적의 체력
+    this.maxHp = 50;       // 적의 처음 체력
+    this.hp = this.maxHp;  // 적의 현재 체력
     this.targetIndex = 1;  // 경로에서 현재 목표 지점의 인덱스
     this.dead = false;     // 적이 죽었는지 여부 (초기값은 살아 있음)
   }
@@ -33,9 +34,21 @@ class Enemy {
 
   // 적을 화면에 그리는 메서드
   draw() {
-    // fill(255, 80, 80);  // 적의 색상 (빨간색)
-    // circle(this.pos.x, this.pos.y, 30);  // 적을 원 모양으로 화면에 그리기
     imageMode(CENTER); // 중심 기준으로 그림
     image(enemyImg, this.pos.x, this.pos.y, 50, 50);
+
+    // 게이지 바 그리기
+    this.drawHpBar();
+  }
+
+  drawHpBar() {
+    // HP 바 배경
+    fill(255, 0, 0);
+    rect(this.pos.x - 25, this.pos.y - 40, 50, 4);
+
+    // HP 바 채워진 부분
+    fill(0, 255, 0);
+    let hpWidth = (this.hp / this.maxHp) * 50;
+    rect(this.pos.x - 25, this.pos.y - 40, hpWidth, 4);
   }
 }
