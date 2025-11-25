@@ -1,11 +1,9 @@
 // 최종 기지 클래스
-
-
 class Base {
   constructor(x, y) {
     this.pos = createVector(x, y); // 기지의 중심 위치를 저장하는 벡터 (x, y)
     this.hp = 200;                 // 기지의 전체 체력(초기값)
-    this.size = 100;                // 기지의 화면에 그릴 크기(정사각형의 한 변 길이)
+    this.size = 130;                // 기지의 화면에 그릴 크기(정사각형의 한 변 길이)
   }
 
   draw() {
@@ -14,14 +12,14 @@ class Base {
     image(baseImg, this.pos.x, this.pos.y, this.size, this.size); // 기지 본체(정사각형) 그리기
 
     // HP 바(배경 빨간색)
-    fill(255, 0, 0);               // HP 바 배경 색 설정(빨강)
-    rectMode(CENTER);
-    rect(this.pos.x, this.pos.y - 40, this.size, 8); // HP 바의 전체 틀(빨강) 그리기
+    // fill(255, 0, 0);               // HP 바 배경 색 설정(빨강)
+    // rectMode(CENTER);
+    // rect(this.pos.x, this.pos.y - 40, this.size, 8); // HP 바의 전체 틀(빨강) 그리기
 
     // HP 바(초록색: 남은 체력 비율에 따라 너비 조정)
-    fill(0, 255, 0);               // HP 바 남은 부분 색 설정(초록)
-    let w = map(this.hp, 0, 200, 0, this.size); // 현재 hp를 0~this.size 너비로 매핑
-    rect(this.pos.x - (this.size - w) / 2, this.pos.y - 40, w, 8);
+    // fill(0, 255, 0);               // HP 바 남은 부분 색 설정(초록)
+    // let w = map(this.hp, 0, 200, 0, this.size); // 현재 hp를 0~this.size 너비로 매핑
+    // rect(this.pos.x - (this.size - w) / 2, this.pos.y - 40, w, 8);
     // ↑ 왼쪽 정렬 맞추기: 전체 크기(this.size)에 대해 남은 너비(w)를
     //    중앙 기준으로 위치시키기 위해 x 위치를 보정해서 그림
   }
