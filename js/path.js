@@ -13,7 +13,7 @@ class Path {
       { x: 610, y: 430 }, // 여덟 번째 지점
       { x: 610, y: 530 }  // 경로 끝 지점
     ];
-    this.pathThickness = 15; // 경로 두께
+    this.pathThickness = 10; // 경로 두께
   }
 
   // (x, y)가 경로 위인지 확인
