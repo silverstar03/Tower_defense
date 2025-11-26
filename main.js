@@ -8,6 +8,7 @@ let fixedBtn;
 let gameButton;
 let descButton;
 let onPath;
+let startButton;
 
 // 이미지 관련 변수들
 let mapImg;
@@ -18,6 +19,8 @@ let mainImg;
 let failImg;
 let clearImg;
 let baseImg;
+let descPopupImg;
+let xBtnImg;
 
 // 이미지 로드
 function preload() {
@@ -29,6 +32,8 @@ function preload() {
   failImg = loadImage('./asset/fail.png');
   clearImg  = loadImage('./asset/clear.png');
   baseImg = loadImage('./asset/tower_ssu.png');
+  descPopupImg = loadImage('./asset/descPopup.png');
+  xBtnImg = loadImage('./asset/xBtn.png');
 }
 
 // 우클릭 메뉴 막기
@@ -38,14 +43,14 @@ document.oncontextmenu = function () {
 
 // 메인 -> 게임 시작 버튼 생성 함수
 function createStartButton() {
-  let startButton = createButton("");
-  startButton.position(width/2 - 210, height/2 - 225);
+  startButton = createButton("");
+  startButton.position(width/2 - 180, height/2 - 110);
   startButton.style("padding", "0");
   startButton.style("border", "none");
   startButton.style("background", "none");
 
   let startIcon = createImg('./asset/startBtn.png');
-  startIcon.size(380, 345);
+  startIcon.size(300, 110);
   startIcon.parent(startButton);
 
   startButton.mousePressed(() => {
@@ -71,18 +76,40 @@ function createStartButton() {
 // 게임 설명 버튼 생성 함수
 function createDescButton() {
   descButton = createButton("");
-  descButton.position(635, 500);
+  descButton.position(655, 510);
   descButton.style("padding", "0");
   descButton.style("border", "none");
   descButton.style("background", "none");
 
   let descIcon = createImg('./asset/descBtn.png');
-  descIcon.size(250, 100);
+  descIcon.size(230, 90);
   descIcon.parent(descButton);
 
   descButton.mousePressed(() => {
-    // 설명 창 띄우기
-    console.log('설명창')
+    descPopupLoad();
+  });
+}
+
+// 설명 팝업 로드
+function descPopupLoad() {
+  startButton.hide();
+  descButton.hide();
+  imageMode(CENTER);
+  image(descPopupImg, width/2, height/2, 700, 420);
+
+  let xBtn = createButton("");
+  xBtn.position(720, 430);
+  xBtn.style("padding", "0");
+  xBtn.style("border", "none");
+  xBtn.style("background", "none");
+  
+  let xBtnIcon = createImg('./asset/xBtn.png');
+  xBtnIcon.size(50, 50);
+  xBtnIcon.parent(xBtn);
+
+  xBtn.mousePressed(() => {
+    xBtn.hide();
+    setup();
   });
 }
 
@@ -244,7 +271,6 @@ function draw() {
     }
   }
 
-  // 게임 시작 시 
   if (gameState != "init" && gameState != "end") {   
     let base;
     let path = new Path();
@@ -279,6 +305,7 @@ function mousePressed() {
           if (dist(mouseX, mouseY, t.pos.x, t.pos.y) < 25) {
             gameManager.towers.splice(i, 1); // 타워 삭제
             gameManager.towerCount++;        // 설치 가능 개수 복구
+            selectedTower = null;
             break;
           }
       }
