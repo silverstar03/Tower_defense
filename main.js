@@ -183,6 +183,29 @@ function draw() {
     rect(795, 435, 70, 70, 15);
 
     gameManager.pathDraw();  // 경로 그리기
+
+    // 타워 설치 가능할 때만 마우스 커서에 이미지 붙이기
+    if ( gameManager.towerCount > 0 && selectedTower != null) {
+      // 범위 테두리 그림자 생성
+      noStroke();
+      fill(255, 90);
+      
+      // 설치 불가 영역 표시
+      if (mouseX > 680 || mouseX < 150 || mouseY > 520 || onPath) {
+        fill(255, 0, 0, 90);
+      }
+
+      if (selectedTower == "tracking") {
+        ellipse(mouseX, mouseY, 200, 200); // 사거리 원 그리기
+        imageMode(CENTER);
+        image(trackingTowerImg , mouseX, mouseY, 50, 50);
+      } else if (selectedTower == "fixed") {
+        ellipse(mouseX, mouseY, 160, 160); // 사거리 원 그리기
+        imageMode(CENTER);
+        image(fixedGunTowerImg , mouseX, mouseY, 50, 50);
+      }
+    }
+
   }
   // 게임 시작(적들이 나오기 시작) 
   else if (gameState == "play") {
@@ -232,28 +255,6 @@ function draw() {
     base = new Base(end.x, end.y);
     base.draw();
   }
-
-  // 타워 설치 가능할 때만 마우스 커서에 이미지 붙이기
-  if ( gameManager.towerCount > 0 && selectedTower != null) {
-    // 범위 테두리 그림자 생성
-    noStroke();
-    fill(255, 90);
-    
-    // 설치 불가 영역 표시
-    if (mouseX > 680 || mouseX < 150 || mouseY > 520 || onPath) {
-      fill(255, 0, 0, 90);
-    }
-
-    if (selectedTower == "tracking") {
-      ellipse(mouseX, mouseY, 200, 200); // 사거리 원 그리기
-      imageMode(CENTER);
-      image(trackingTowerImg , mouseX, mouseY, 50, 50);
-    } else if (selectedTower == "fixed") {
-      ellipse(mouseX, mouseY, 160, 160); // 사거리 원 그리기
-      imageMode(CENTER);
-      image(fixedGunTowerImg , mouseX, mouseY, 50, 50);
-    }
-  }
 }
 
 // 마우스 클릭 시 타워를 설치
@@ -262,7 +263,7 @@ function mousePressed() {
 
     // 마우스 좌클릭
     if(mouseButton === LEFT) {
-      if (mouseX > 700 || mouseX < 150 || mouseYc > 520 || onPath) return;   // 게임맵을 벗어나면 타워 못그리게 막기)
+      if (mouseX > 700 || mouseX < 150 || mouseY > 520 || onPath) return;   // 게임맵을 벗어나면 타워 못그리게 막기)
       if (selectedTower) {
         gameManager.handleTowerPlacement(mouseX, mouseY, selectedTower);  // 마우스 클릭 위치에 타워 배치
         selectedTower = null;  // 타워 선택 초기화
