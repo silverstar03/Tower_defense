@@ -5,7 +5,8 @@ class GameManager {
     this.timeLimit = 90;  // 게임 시간 제한 (초 단위)
 
     this.lives = 5;     // 플레이어 목숨
-    this.towerCount = 3; // 타워 개수 3개로 임의 지정
+    this.towerCount = 3;
+    this.towerCount = constrain(this.towerCount, 0, 3); // 타워 개수 3개로 임의 지정
 
     this.enemies = [];  // 적들을 저장할 배열
     this.towers = [];   // 타워들을 저장할 배열
@@ -30,6 +31,7 @@ class GameManager {
   pathDraw() {
     this.path.draw();   // 경로를 화면에 그리기
     this.drawTowers();  // 타워들을 화면에 그리기
+    this.drawTowerCount();
   }
 
   // 게임 전체를 화면에 그리는 메서드
@@ -47,12 +49,13 @@ class GameManager {
   drawTimer() {
     noStroke();    // 글자 테두리 없애기
     fill(255);     // 글자 색을 흰색으로 설정
-    textSize(20);  // 글자 크기 설정
+    textSize(30);  // 글자 크기 설정
+    textFont('Nanum Gothic');
     let t = floor(this.timeLimit - (millis() - this.startTime) / 1000); // 남은 시간 계산
     if (t < 0) {
         t = 0;
     }
-    text(`남은 시간: ${t}초`, 20, 30);  // 화면에 남은 시간 텍스트 표시
+    text(`⏱️: ${t}초`, 10, 40);  // 화면에 남은 시간 텍스트 표시
   }
 
   // 주기적으로 적을 생성하는 메서드
@@ -127,7 +130,6 @@ class GameManager {
 
     // 남은 타워 없으면 설치 불가
     if (this.towerCount < 0) {
-      this.towerCount = 0;
       return;
     }
 
@@ -155,7 +157,19 @@ class GameManager {
   // 화면에 남은 목숨 그려주는 메서드
   drawLives() {
     fill(255);
-    textSize(20);
-    text(`목숨 : ${this.lives}`, width - 80, 30);
+    textSize(30);
+    text(`❤️ X ${this.lives}`, width - 120, 40);
+  }
+
+  // 화면에 설치 가능 타워 개수 그려주는 메서드
+  drawTowerCount() {
+    noStroke();
+    imageMode(CORNER);
+    image(trackingTowerImg, width - 135, 15, 30, 30);
+    image(fixedGunTowerImg, width - 110, 15, 30, 30);
+    fill(255);
+    textFont('Spoqa Han Sans');
+    textSize(30);
+    text(`X ${this.towerCount}`, width - 70, 40);
   }
 }
