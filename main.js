@@ -24,6 +24,10 @@ let baseImg;
 let descPopupImg;
 let xBtnImg;
 let infoPopupImg;
+let roadImg;
+let roadCornerImg;
+let roadHalfImg;
+let roadQuarterImg;
 
 // 이미지 로드
 function preload() {
@@ -38,6 +42,10 @@ function preload() {
   descPopupImg = loadImage('./asset/descPopup.png');
   xBtnImg = loadImage('./asset/xBtn.png');
   infoPopupImg = loadImage('./asset/infoPopup.png');
+  roadImg = loadImage('./asset/road.png');
+  roadCornerImg = loadImage('./asset/road_corner.png');
+  roadHalfImg = loadImage('./asset/road_half.png');
+  roadQuarterImg = loadImage('./asset/road_quarter.png');
 }
 
 // 우클릭 메뉴 막기
@@ -173,6 +181,9 @@ function setup() {
 
   // 게임 관리 인스턴스 생성
   gameManager = new GameManager();
+  
+  // 도로 이미지를 Path 객체에 전달
+  gameManager.path.loadImages(roadImg, roadCornerImg, roadHalfImg, roadQuarterImg);
 
   // 메인 이미지 로드
   imageMode(CENTER);
