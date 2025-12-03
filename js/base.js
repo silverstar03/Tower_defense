@@ -2,7 +2,6 @@
 class Base {
   constructor(x, y) {
     this.pos = createVector(x, y); // 기지의 중심 위치를 저장하는 벡터 (x, y)
-    this.hp = 200;                 // 기지의 전체 체력(초기값)
     this.size = 130;                // 기지의 화면에 그릴 크기(정사각형의 한 변 길이)
   }
 
