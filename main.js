@@ -11,6 +11,7 @@ let onPath;
 let startButton;
 let infoButton;
 let xBtn;
+let returnBtn;
 
 // 이미지 관련 변수들
 let mapImg;
@@ -116,6 +117,7 @@ function descPopupLoad() {
     startButton.hide();
     descButton.hide();
     infoButton.hide();
+    // clear();
     setup();
   });
 }
@@ -151,8 +153,6 @@ function infoPopupLoad() {
   let xBtnIcon = createImg('./asset/xBtn.png');
   xBtnIcon.size(50, 50);
   xBtnIcon.parent(xBtn);
-
-  xBtn.show();
 
   xBtn.mousePressed(() => {
     xBtn.hide();
@@ -237,6 +237,9 @@ function createGameButton() {
     if (mouseButton === RIGHT) return;
       // 게임 제한시간 카운트 시작
     gameManager.startTime = millis();
+    gameManager.lastActiveTime = millis();
+    gameManager.activeElapsed = 0;
+    gameManager.gameActive = true;
     gameState = "play";
 
   });
@@ -299,7 +302,7 @@ function draw() {
     gameManager.draw();    // 게임 화면 그리기 (적, 타워, 총알, 경로 등)
 
     // 시간이 0이 됐을 때 목숨이 남아있으면 클리어
-    if (millis() - gameManager.startTime > gameManager.timeLimit * 1000 && gameManager.lives > 0) {
+    if (gameManager.getRemainingTime() <= 0 && gameManager.lives > 0) {
       gameState = "end";
       result = "clear";
     }
@@ -322,6 +325,8 @@ function draw() {
       imageMode(CORNER);
       image(clearImg, 0, 0, 900, 600);
     }
+
+    createReturnButton();
   }
 
   if (gameState != "init" && gameState != "end") {   
@@ -334,6 +339,24 @@ function draw() {
     base = new Base(end.x, end.y);
     base.draw();
   }
+}
+
+// 메인화면으로 돌아가기 버튼 생성 함수
+function createReturnButton() {
+  returnBtn = createButton("");
+  returnBtn.position(710, 520);
+  returnBtn.style("padding", "0");
+  returnBtn.style("border", "none");
+  returnBtn.style("background", "none");
+
+  let returnBtnIcon = createImg('./asset/return_main.png');
+  returnBtnIcon.size(170, 65);
+  returnBtnIcon.parent(returnBtn);
+
+  returnBtn.mousePressed(() => {
+    if (mouseButton === RIGHT) return;
+    window.location.reload();
+  });
 }
 
 // 마우스 클릭 시 타워를 설치
@@ -366,3 +389,17 @@ function mousePressed() {
   }
   
 }
+
+// 웹브라우저 비활성화 시 시간 안흐르게 하는 이벤트
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    // 비활성화 시 경과 시간 누적
+    gameManager.activeElapsed += (millis() - gameManager.lastActiveTime) / 1000;
+    gameManager.gameActive = false;
+
+  } else {
+    // 다시 활성화 시 기준점 갱신
+    gameManager.lastActiveTime = millis();
+    gameManager.gameActive = true;
+  }
+});

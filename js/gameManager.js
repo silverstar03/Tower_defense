@@ -12,11 +12,44 @@ class GameManager {
     this.towers = [];   // 타워들을 저장할 배열
     this.bullets = [];  // 총알들을 저장할 배열
 
-    this.spawnInterval = 1300; // 적 생성 주기 (밀리초 단위)
+    this.spawnInterval = 1.3; // 적 생성 주기 (초 단위)
     this.lastSpawn = 0;        // 마지막 적 생성 시간 기록
 
     this.path = new Path();    // 적이 이동할 경로
+
+    this.activeElapsed = 0;    // 게임창이 활성화 된 시간 누적 값
+    this.lastActiveTime = 0;   // 마지막으로 창이 활성화 된 시간
+    this.gameActive = true;    // 현재 웹브라우저 활성화 여부
   }
+
+  // 제한 시간에서 웹브라우저 활성화 시간 뺀 값 측정
+  getRemainingTime() {
+    // 누적된 시간
+    let currentElapsed = this.activeElapsed;
+
+    // 현재 창이 활성화 상태면 추가 누적
+    if (this.gameActive) {
+      currentElapsed += (millis() - this.lastActiveTime) / 1000;
+    }
+
+    // 제한 시간에서 경과 시간 뺀 값이 0보다 작아지지 않게 하기
+    return max(0, this.timeLimit - currentElapsed);
+  }
+
+  // 실제 게임 활성화 시간 반환
+  getActiveElapsedTime() {
+    // 누적된 시간
+    let elapsed = this.activeElapsed;
+
+    // 현재 창이 활성화 상태면 추가 누적
+    if (this.gameActive) {
+      elapsed += (millis() - this.lastActiveTime) / 1000;
+    }
+
+    // 실제 게임 활성화 시간 반환
+    return elapsed;
+  }
+
 
   // 게임 전체 상태를 업데이트하는 메서드
   update() {
@@ -51,7 +84,7 @@ class GameManager {
     fill(255);     // 글자 색을 흰색으로 설정
     textSize(30);  // 글자 크기 설정
     textFont('Nanum Gothic');
-    let t = floor(this.timeLimit - (millis() - this.startTime) / 1000); // 남은 시간 계산
+    let t = floor(this.getRemainingTime()); // 남은 시간 계산
     if (t < 0) {
         t = 0;
     }
@@ -60,15 +93,18 @@ class GameManager {
 
   // 주기적으로 적을 생성하는 메서드
   spawnEnemies() {
-    let remainingTime = this.timeLimit - (millis() - this.startTime) / 1000;
-
+    // 남은 시간 측정
+    let remainingTime = this.getRemainingTime();
     // 제한시간이 끝나면 적 생성 안함
     if (remainingTime <= 0) return;
 
+    // 실제 게임한 시간 측정
+     let gameTime = this.getActiveElapsedTime();
+
     // 일정 주기마다 적을 생성
-    if (millis() - this.lastSpawn > this.spawnInterval) {
+    if (gameTime - this.lastSpawn >= this.spawnInterval) {
       this.enemies.push(new Enemy(this.path));  // 적을 생성하고 경로를 할당
-      this.lastSpawn = millis();  // 마지막 생성 시간을 갱신
+      this.lastSpawn = gameTime;  // 마지막 생성 시간을 갱신
     }
   }
 
