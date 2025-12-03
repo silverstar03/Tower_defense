@@ -53,22 +53,6 @@ class Path {
   }
 
   // 경로를 화면에 그리는 메서드
-  // draw() {
-  //   imageMode(CORNER);
-  //   image(mapImg, 0 , 0, 900, 600);
-
-  //   stroke(200);
-  //   strokeWeight(20);
-  //   noFill(); 
-
-  //   beginShape();  // 경로 시작
-  //   for (let p of this.points) {  // 경로의 각 지점에 대해
-  //     vertex(p.x, p.y);  // 해당 지점으로 선을 그음
-  //   }
-  //   endShape();  // 경로 끝
-  // }
-
-  // 경로를 점선으로 그리는 메서드
   draw() {
     imageMode(CORNER);
     image(mapImg, 0, 0, 900, 600);
