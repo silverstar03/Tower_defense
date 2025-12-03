@@ -54,6 +54,9 @@ class Path {
 
   // 경로를 화면에 그리는 메서드
   draw() {
+    imageMode(CORNER);
+    image(mapImg, 0 , 0, 900, 600);
+
     stroke(200);
     strokeWeight(20);
     noFill(); 

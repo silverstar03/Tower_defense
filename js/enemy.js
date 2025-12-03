@@ -29,7 +29,10 @@ class Enemy {
   // 적이 데미지를 입을 때 호출되는 메서드
   takeDamage(dmg) {
     this.hp -= dmg;  // 체력에서 데미지만큼 차감
-    if (this.hp <= 0) this.dead = true;  // 체력이 0 이하가 되면 적이 죽음
+    if (this.hp <= 0) {
+      this.dead = true;  // 체력이 0 이하가 되면 적이 죽음
+      deathBgm.play();
+    }
   }
 
   // 적을 화면에 그리는 메서드

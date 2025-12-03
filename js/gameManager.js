@@ -8,6 +8,11 @@ class GameManager {
     this.towerCount = 3;
     this.towerCount = constrain(this.towerCount, 0, 3); // 타워 개수 3개로 임의 지정
 
+    this.gameBtn = null;
+
+    this.trackingBtn = null;  // 타워 버튼
+    this.fixedBtn = null;     // 타워 버튼
+
     this.enemies = [];  // 적들을 저장할 배열
     this.towers = [];   // 타워들을 저장할 배열
     this.bullets = [];  // 총알들을 저장할 배열
@@ -50,7 +55,6 @@ class GameManager {
     return elapsed;
   }
 
-
   // 게임 전체 상태를 업데이트하는 메서드
   update() {
     this.spawnEnemies();  // 주기적으로 적 생성
@@ -61,10 +65,14 @@ class GameManager {
   }
 
   // 게임 시작 전 타워 설정하는 메서드
-  pathDraw() {
-    this.path.draw();   // 경로를 화면에 그리기
-    this.drawTowers();  // 타워들을 화면에 그리기
-    this.drawTowerCount();
+  readyDraw() {
+    this.path.draw();       // 경로 그리기
+    this.drawTowers();      // 타워 그리기
+    this.drawTowerCount();  // 설치 가능 타워 개수 화면에 그리기
+    this.drawbase();        // 숭실대 타워 그리기
+    this.drawBtnBg();
+    this.drawTowersBtn();   // 타워 설치 버튼 그리기
+    this.drawGameBtn();     // 게임 버튼 그리기
   }
 
   // 게임 전체를 화면에 그리는 메서드
@@ -76,6 +84,7 @@ class GameManager {
 
     this.drawEnemies(); // 적들을 화면에 그리기
     this.drawBullets(); // 총알들을 화면에 그리기
+    this.drawbase();    // 숭실대 타워 그리기
   }
 
   // 남은 시간 표시
@@ -131,6 +140,99 @@ class GameManager {
     }
   }
 
+  // 타워 설치 & 시작 버튼 밑에 도형 그리는 메서드
+  drawBtnBg() {
+    rectMode(CORNER);
+    stroke(129,103,31);
+    strokeWeight(5);
+    fill(114, 155, 88);
+    rect(695, 420, 190, 170, 15);
+
+    stroke(60, 34, 0);
+    fill(163, 99, 23);
+    rect(712, 435, 70, 70, 15);
+    rect(795, 435, 70, 70, 15);
+  }
+
+  // 게임 시작 버튼 생성 메서드
+  drawGameBtn() {
+    if(this.gameBtn) return;
+
+    this.gameBtn = createButton("");
+    this.gameBtn.position(710, 520);
+    this.gameBtn.style("padding", "0");
+    this.gameBtn.style("border", "none");
+    this.gameBtn.style("background", "none");
+
+    let gameBtnIcon = createImg('./asset/images/startEngBtn.png');
+    gameBtnIcon.size(170, 65);
+    gameBtnIcon.parent(this.gameBtn);
+
+    this.gameBtn.mousePressed(() => {
+      if (mouseButton === RIGHT) return;
+
+      this.removeTowerBtn();
+      this.gameBtn.remove();
+      this.gameBtn = null;
+
+      // 게임 시작
+      gameState = "play";
+      bgm.setVolume(0.3); //사운드 크기 지정
+      bgm.loop(); // bgm 반복 재생
+      this.startTime = millis();
+      this.lastActiveTime = millis();
+      this.activeElapsed = 0;
+      this.gameActive = true;
+    });
+  }
+
+  // 타워 설치 버튼 생성 메서드
+  drawTowersBtn() {
+    if(this.trackingBtn && this.fixedBtn) return;
+    
+    this.trackingBtn = createButton("");
+    this.trackingBtn.position(730, 455);
+    this.trackingBtn.style("padding", "0");
+    this.trackingBtn.style("border", "none");
+    this.trackingBtn.style("background", "none");
+
+    let trackingIcon = createImg('./asset/images/tower_1_logo_new.png');
+    trackingIcon.size(50, 50);
+    trackingIcon.parent(this.trackingBtn);
+
+    this.trackingBtn.mousePressed(() => {
+      if (mouseButton === RIGHT) return;
+      selectedTower = "tracking";
+    });
+    
+    this.fixedBtn = createButton("");
+    this.fixedBtn.position(813, 455);
+    this.fixedBtn.style("padding", "0");
+    this.fixedBtn.style("border", "none");
+    this.fixedBtn.style("background", "none");
+    
+    let fixedIcon = createImg('./asset/images/tower_2_logo_new.png');
+    fixedIcon.size(50, 50);
+    fixedIcon.parent(this.fixedBtn);
+
+    this.fixedBtn.mousePressed(() => {
+      if (mouseButton === RIGHT) return;
+      selectedTower = "fixed";
+    });
+  }
+
+  removeTowerBtn() {
+    if (this.trackingBtn) {
+      this.trackingBtn.remove();
+      this.trackingBtn = null;
+    }
+
+    if (this.fixedBtn) {
+      this.fixedBtn.remove();
+      this.fixedBtn = null;
+    }    
+  }
+
   // 화면에 타워들을 그리는 메서드
   drawTowers() {
     for (let t of this.towers) {
@@ -151,7 +253,6 @@ class GameManager {
     // 죽은 총알 제거
     this.bullets = this.bullets.filter(b => !b.dead);
   }
-
 
   // 화면에 총알들을 그리는 메서드
   drawBullets() {
@@ -183,6 +284,7 @@ class GameManager {
         if (!e.dead && e.targetIndex >= this.path.points.length) {
             this.lives -= 1;
             e.dead = true;
+            baseBgm.play();
         }
     }
 
@@ -207,5 +309,15 @@ class GameManager {
     textFont('Spoqa Han Sans');
     textSize(30);
     text(`X ${this.towerCount}`, width - 70, 40);
+  }
+  
+  // 숭실대 타워 설치 메서드
+  drawbase () {
+    let base;
+    // 경로 마지막 가져오기
+    let end = this.path.points[this.path.points.length - 1];
+    // 경로의 마지막에 숭실대 타워 설치
+    base = new Base(end.x, end.y);
+    base.draw();
   }
 }
