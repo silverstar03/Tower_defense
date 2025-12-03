@@ -53,18 +53,66 @@ class Path {
   }
 
   // 경로를 화면에 그리는 메서드
+  // draw() {
+  //   imageMode(CORNER);
+  //   image(mapImg, 0 , 0, 900, 600);
+
+  //   stroke(200);
+  //   strokeWeight(20);
+  //   noFill(); 
+
+  //   beginShape();  // 경로 시작
+  //   for (let p of this.points) {  // 경로의 각 지점에 대해
+  //     vertex(p.x, p.y);  // 해당 지점으로 선을 그음
+  //   }
+  //   endShape();  // 경로 끝
+  // }
+
+  // 경로를 점선으로 그리는 메서드
   draw() {
     imageMode(CORNER);
-    image(mapImg, 0 , 0, 900, 600);
+    image(mapImg, 0, 0, 900, 600);
 
-    stroke(200);
-    strokeWeight(20);
-    noFill(); 
+    stroke(150);        // 회색 도로
+    strokeWeight(25);   // 도로 두께
+    noFill();
 
     beginShape();  // 경로 시작
     for (let p of this.points) {  // 경로의 각 지점에 대해
       vertex(p.x, p.y);  // 해당 지점으로 선을 그음
     }
     endShape();  // 경로 끝
+
+    // 중앙선 그리기
+    stroke(222, 222, 18);  // 노란색 중앙선
+    strokeWeight(4);      // 중앙선 두께
+    let dashLength = 20;  // 점선 길이
+    let gapLength = 15;   // 점선 간격
+
+    for (let i = 0; i < this.points.length - 1; i++) {
+      let p1 = this.points[i];
+      let p2 = this.points[i + 1];
+
+      // 두 점 사이 거리와 단위 벡터 계산
+      let totalDist = dist(p1.x, p1.y, p2.x, p2.y);
+      let dx = (p2.x - p1.x) / totalDist;
+      let dy = (p2.y - p1.y) / totalDist;
+
+      let currentDist = 0;
+      while (currentDist < totalDist) {
+        let startX = p1.x + dx * currentDist;
+        let startY = p1.y + dy * currentDist;
+
+        let endDist = min(currentDist + dashLength, totalDist);
+        let endX = p1.x + dx * endDist;
+        let endY = p1.y + dy * endDist;
+
+        line(startX, startY, endX, endY);
+
+        currentDist += dashLength + gapLength;
+      }
+    }
   }
+
+
 }
