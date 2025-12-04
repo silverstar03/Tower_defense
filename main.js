@@ -41,6 +41,7 @@ function preload() {
   mapImg = loadImage('./asset/images/map.png');
   descPopupImg = loadImage('./asset/images/descPopup.png');
   infoPopupImg = loadImage('./asset/images/infoPopup.png');
+  dmLogoImg = loadImage('./asset/images/dmLogo.png');
 
   // 사운드 로드
   clickBgm = loadSound('./asset/sounds/click_sound.mp3');
@@ -76,6 +77,8 @@ function mainLoad() {
   createDescButton();
   // 인포 팝업 버튼 생성
   createInfoButton();
+  // 학과 로고 이미지 띄우기
+  drawLogoImage();
 }
 
 // 메인 버튼 제거
@@ -266,6 +269,8 @@ function drawEndScreen() {
 
   // 메인으로 돌아가기 버튼
   createReturnButton();
+  // 학과 로고 이미지
+  drawLogoImage();
 }
 
 // 메인화면으로 돌아가기 버튼 생성 함수
@@ -299,6 +304,12 @@ function createReturnButton() {
     clear();
     mainLoad();
   });
+}
+
+// 학과 로고 이미지 띄우기
+function drawLogoImage() {
+  imageMode(CORNER);
+  image(dmLogoImg, 15, 15, 70, 34);
 }
 
 // 마우스 클릭 시 타워를 설치
