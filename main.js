@@ -44,16 +44,16 @@ function preload() {
   dmLogoImg = loadImage('./asset/images/dmLogo.png');
 
   // 사운드 로드
-  clickBgm = loadSound('./asset/sounds/click_sound.mp3');
-  bgm = loadSound('./asset/sounds/background_bgm.mp3');
-  failBgm = loadSound('./asset/sounds/game_over_bgm.mp3');
+  // clickBgm = loadSound('./asset/sounds/click_sound.mp3');
+  // bgm = loadSound('./asset/sounds/background_bgm.mp3');
+  // failBgm = loadSound('./asset/sounds/game_over_bgm.mp3');
 }
 
 function setup() {
   let canvas = createCanvas(900, 600);  // 캔버스 크기 설정
   canvas.background(230);
 
-  clickBgm.setVolume(1.0);
+  // clickBgm.setVolume(1.0);
 
   // 우클릭 기본 메뉴 막기
   canvas.elt.oncontextmenu = () => false;
@@ -105,10 +105,10 @@ function loadResources() {
   clearImg  = loadImage('./asset/images/clear.png');
 
   // 사운드 로드
-  deathBgm = loadSound('./asset/sounds/death_enemy.mp3');
-  clearBgm = loadSound('./asset/sounds/game_clear_bgm.mp3');
-  hitBgm = loadSound('./asset/sounds/hit_sound.mp3');
-  baseBgm = loadSound('./asset/sounds/tower_fire_sound.mp3');
+  // deathBgm = loadSound('./asset/sounds/death_enemy.mp3');
+  // clearBgm = loadSound('./asset/sounds/game_clear_bgm.mp3');
+  // hitBgm = loadSound('./asset/sounds/hit_sound.mp3');
+  // baseBgm = loadSound('./asset/sounds/tower_fire_sound.mp3');
 }
 
 // 메인 -> 게임 시작 버튼 생성 함수
@@ -254,15 +254,15 @@ function draw() {
 
 // 결과 화면 보여주는 함수
 function drawEndScreen() {
-  bgm.stop();
+  // bgm.stop();
   imageMode(CORNER);
   if (!resultSound) {
     if (result == "fail") {
       image(failImg, 0, 0, 900, 600);
-      failBgm.play();
+      // failBgm.play();
     } else if (result == "clear") {
       image(clearImg, 0, 0, 900, 600);
-      clearBgm.play();
+      // clearBgm.play();
     }
   }
   resultSound = true;
@@ -290,8 +290,8 @@ function createReturnButton() {
   returnBtn.mousePressed(() => {
     if (mouseButton === RIGHT) return;
 
-    failBgm.stop();
-    clearBgm.stop();
+    // failBgm.stop();
+    // clearBgm.stop();
 
     // 버튼 제거 및 null 처리
     if (returnBtn) {
@@ -314,7 +314,7 @@ function drawLogoImage() {
 
 // 마우스 클릭 시 타워를 설치
 function mousePressed() {
-  clickBgm.play();
+  // clickBgm.play();
 
   if (gameState !== "ready") return;
 

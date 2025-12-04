@@ -34,7 +34,7 @@ class TrackingTower extends Tower {
     // 타겟이 있고 발사 가능하면 추적 총알 발사
     if (target && this.canShoot()) {
       bullets.push(new TrackingBullet(this.pos.x, this.pos.y, target)); 
-      hitBgm.play();
+      // hitBgm.play();
       this.lastShot = millis(); // 발사 시간 갱신
     }
   }
@@ -71,7 +71,7 @@ class FixedGunTower extends Tower {
           let rad = radians(a);
           let dir = createVector(cos(rad), sin(rad)); // 단위 벡터
           bullets.push(new FixedBullet(this.pos.x, this.pos.y, dir));
-          hitBgm.play();
+          // hitBgm.play();
       }
 
       // 발사 시간 갱신

@@ -177,8 +177,8 @@ class GameManager {
 
       // 게임 시작
       gameState = "play";
-      bgm.setVolume(0.3); //사운드 크기 지정
-      bgm.loop(); // bgm 반복 재생
+      // bgm.setVolume(0.3); //사운드 크기 지정
+      // bgm.loop(); // bgm 반복 재생
       this.startTime = millis();
       this.lastActiveTime = millis();
       this.activeElapsed = 0;
@@ -284,7 +284,7 @@ class GameManager {
         if (!e.dead && e.targetIndex >= this.path.points.length) {
             this.lives -= 1;
             e.dead = true;
-            baseBgm.play();
+            // baseBgm.play();
         }
     }
 

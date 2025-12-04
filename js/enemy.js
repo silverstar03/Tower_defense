@@ -31,7 +31,7 @@ class Enemy {
     this.hp -= dmg;  // 체력에서 데미지만큼 차감
     if (this.hp <= 0) {
       this.dead = true;  // 체력이 0 이하가 되면 적이 죽음
-      deathBgm.play();
+      // deathBgm.play();
     }
   }
 
